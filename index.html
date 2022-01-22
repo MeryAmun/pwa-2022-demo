@@ -94,6 +94,17 @@
     const db = getFirestore(app);
 
 
+    //offline data using indexDb
+    db.enablePersistence()
+    .catch(err => {
+      if(err.code === 'failed-precondition'){
+        //probably multiple tabs open
+        console.log('persistence failed')
+      }else if(err.code === 'unimplemented') {
+                //lack of browser support
+                console.log('persistenc is not available')
+      }
+    })
     async function getRecipes(db) {
   const recipesCol = collection(db, 'recipes');
   const recipeSnapshot = await getDocs(recipesCol);
