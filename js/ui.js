@@ -26,3 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     recipes.innerHTML += html
   }
+  //remove recipe from dom
+
+  const removeRecipe = (id) => {
+    const recipe = document.querySelector(`.recipe[data-id=${id}]`);
+    recipe.remove();
+  }
