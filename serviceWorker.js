@@ -55,22 +55,24 @@ self.addEventListener("activate", activateEvt => {
 })
 // FETCH EVENT
 self.addEventListener('fetch',fetchEvt =>{
-    // console.log("fetch", fetchEvt)
-    // fetchEvt.respondWith(
-    // caches.match(fetchEvt.request)
-    // .then((cacheRes) => {
-    //     return cacheRes || fetch(fetchEvt.request).then(fetchRes => {
-    //         return caches.open(dynamicCacheName).then(cache =>{
-    //              cache.put(fetchEvt.request.url,fetchRes.clone())
-    //              limitCacheSize(dynamicCacheName, 15)
-    //              return fetchRes;
-    //             })
-    //     })
-    // }).catch(() => {
-    //    if(fetchEvt.request.url.indexOf('.html') > -1 ){
-    //     return caches.match('/pages/fallback.html')
-    //    }
-    // })
-    // )
+    //console.log("fetch", fetchEvt)
+   if(fetchEvt.request.url.indexOf('firestore.googleapis.com') === -1 ){
+    fetchEvt.respondWith(
+        caches.match(fetchEvt.request)
+        .then((cacheRes) => {
+            return cacheRes || fetch(fetchEvt.request).then(fetchRes => {
+                return caches.open(dynamicCacheName).then(cache =>{
+                     cache.put(fetchEvt.request.url,fetchRes.clone())
+                     limitCacheSize(dynamicCacheName, 15)
+                     return fetchRes;
+                    })
+            })
+        }).catch(() => {
+           if(fetchEvt.request.url.indexOf('.html') > -1 ){
+            return caches.match('/pages/fallback.html')
+           }
+        })
+        )
+   }
 
 });
