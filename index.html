@@ -71,7 +71,7 @@
   <script type="module">
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
-    import {getFirestore, collection, getDocs} from "https://www.gstatic.com/firebasejs/9.6.4/firebase-firestore.js";
+    import {getFirestore, collection, getDocs,  enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-firestore.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-analytics.js";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
@@ -92,19 +92,24 @@
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
+  
 
 
-    //offline data using indexDb
-    db.enablePersistence()
+    // //offline data using indexDb
+    enableIndexedDbPersistence(db)
     .catch(err => {
       if(err.code === 'failed-precondition'){
         //probably multiple tabs open
         console.log('persistence failed')
       }else if(err.code === 'unimplemented') {
                 //lack of browser support
-                console.log('persistenc is not available')
+                console.log('persistence is not available')
       }
     })
+    
+   
+ 
+
     async function getRecipes(db) {
   const recipesCol = collection(db, 'recipes');
   const recipeSnapshot = await getDocs(recipesCol);
@@ -128,6 +133,7 @@
    
 }
 getRecipes(db)
+
 
   </script>
 
